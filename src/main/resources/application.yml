@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: testRedisCluster
   redis:
     database: 0
     password:
@@ -17,3 +19,10 @@ spring:
         - 139.224.228.145:9004
         - 139.224.228.145:9005
         - 139.224.228.145:9006
+
+
+server:
+  port: 7000
+  undertow:
+    allow-unescaped-characters-in-url: true
+
