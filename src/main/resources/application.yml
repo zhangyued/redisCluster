@@ -1,0 +1,19 @@
+spring:
+  redis:
+    database: 0
+    password:
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 8
+        min-idle: 0
+    timeout: 10000
+    cluster:
+      nodes:
+        - 139.224.228.145:9001
+        - 139.224.228.145:9002
+        - 139.224.228.145:9003
+        - 139.224.228.145:9004
+        - 139.224.228.145:9005
+        - 139.224.228.145:9006
