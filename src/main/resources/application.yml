@@ -25,4 +25,7 @@ server:
   port: 7000
   undertow:
     allow-unescaped-characters-in-url: true
+management:
+  server:
+    port: 7001
 
