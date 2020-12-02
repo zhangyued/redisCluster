@@ -7,7 +7,6 @@ import com.zy.test_redis_cluster.Domain.Dto.TestMySQLClusterController.findEmplo
 import com.zy.test_redis_cluster.Domain.Dto.TestMySQLClusterController.findEmployeeById.FindEmployeeByIdResponseDto;
 import com.zy.test_redis_cluster.Domain.Dto.TestMySQLClusterController.searchEmployee.SearchEmployeeRequestDto;
 import com.zy.test_redis_cluster.Domain.Dto.TestMySQLClusterController.searchEmployee.SearchEmployeeResponseDto;
-import com.zy.test_redis_cluster.Domain.Entity.Employee;
 import com.zy.test_redis_cluster.Repository.EmployeeRepository;
 import com.zy.test_redis_cluster.Service.MySQLClusterService;
 import io.swagger.annotations.ApiModelProperty;
@@ -17,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController("TestMySQLClusterController.v1")
 @RequestMapping("/mysqlCluster")
