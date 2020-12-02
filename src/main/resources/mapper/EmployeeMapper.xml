@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zy.test_redis_cluster.Mapper.EmployeeMapper">
+
+    <select id="searchEmployee"
+            resultType="com.zy.test_redis_cluster.Domain.Dto.TestMySQLClusterController.searchEmployee.SearchEmployeeResponseDto">
+            select * from employee
+            where 1=1
+            <if test="searchEmployeeRequestDto.id != null">
+                and id = #{searchEmployeeRequestDto.id}
+            </if>
+
+            <if test="searchEmployeeRequestDto.employeeName != null ">
+                and employee_name = #{searchEmployeeRequestDto.employeeName}
+            </if>
+
+    </select>
+</mapper>

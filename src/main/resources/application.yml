@@ -1,6 +1,47 @@
+server:
+  port: 7000
+  undertow:
+    allow-unescaped-characters-in-url: true
+management:
+  server:
+    port: 7001
+
 spring:
   application:
     name: testRedisCluster
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: 123456
+    url: jdbc:mysql://139.224.228.145:3307/test_cluster?useUnicode=true&characterEncoding=utf-8&useSSL=false&autoReconnect=true&failOverReadOnly=false
+    type: com.alibaba.druid.pool.DruidDataSource
+    #druid相关配置
+    druid:
+      #监控统计拦截的filters
+      filters: stat
+      #配置初始化大小/最小/最大
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      #获取连接等待超时时间
+      max-wait: 60000
+      #间隔多久进行一次检测，检测需要关闭的空闲连接
+      time-between-eviction-runs-millis: 60000
+      #一个连接在池中最小生存的时间
+      min-evictable-idle-time-millis: 300000
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      #打开PSCache，并指定每个连接上PSCache的大小。oracle设为true，mysql设为false。分库分表较多推荐设置为false
+      pool-prepared-statements: false
+  jpa:
+    database: MySQL
+    show-sql: true
+    # 指定生成表名的存储引擎为InnoDBD
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      # 自动创建|更新|验证数据库表结构配置
+      ddl-auto: update
   redis:
     database: 0
     password:
@@ -20,12 +61,19 @@ spring:
         - 139.224.228.145:9005
         - 139.224.228.145:9006
 
+mybatis:
+  mapper-locations:
+    - classpath*:/mapper/*Mapper.xml
+  configuration:
+    map-underscore-to-camel-case: true
 
-server:
-  port: 7000
-  undertow:
-    allow-unescaped-characters-in-url: true
-management:
-  server:
-    port: 7001
+logging:
+  level:
+    com.zy.test_redis_cluster: debug
+    org.springframework: debug
+    org.mybatis: debug
+
+
+
+
 

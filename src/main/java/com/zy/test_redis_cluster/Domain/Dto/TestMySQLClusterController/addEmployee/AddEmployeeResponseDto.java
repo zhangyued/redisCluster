@@ -1,9 +1,12 @@
-package com.zy.test_redis_cluster.Dto.TestRedisClusterController.addRedisKeyAndValue;
+package com.zy.test_redis_cluster.Domain.Dto.TestMySQLClusterController.addEmployee;
 
-public class AddRedisKeyAndValueResponseDto {
+import io.swagger.annotations.ApiModelProperty;
 
+public class AddEmployeeResponseDto {
+    @ApiModelProperty(value = "返回标识")
     private String returnCode;
 
+    @ApiModelProperty(value = "返回信息")
     private String returnMsg;
 
     public String getReturnCode() {
