@@ -1,5 +1,7 @@
 package com.zy.test_redis_cluster.Repository.Impl;
 
+import com.zy.test_redis_cluster.Domain.Dto.TestMySQLClusterController.findAndUpdate.FindAndUpdateRequestDto;
+import com.zy.test_redis_cluster.Domain.Dto.TestMySQLClusterController.findAndUpdate.FindAndUpdateResponseDto;
 import com.zy.test_redis_cluster.Domain.Dto.TestMySQLClusterController.searchEmployee.SearchEmployeeRequestDto;
 import com.zy.test_redis_cluster.Domain.Dto.TestMySQLClusterController.searchEmployee.SearchEmployeeResponseDto;
 import com.zy.test_redis_cluster.Mapper.EmployeeMapper;
@@ -16,5 +18,10 @@ public class EmployeeExtRepositoryImpl implements EmployeeExtRepository {
     @Override
     public List<SearchEmployeeResponseDto> searchEmployee(SearchEmployeeRequestDto searchEmployeeRequestDto) {
         return employeeMapper.searchEmployee(searchEmployeeRequestDto);
+    }
+
+    @Override
+    public FindAndUpdateResponseDto findEmployeeById(FindAndUpdateRequestDto findAndUpdateRequestDto) {
+        return employeeMapper.findEmployeeById(findAndUpdateRequestDto);
     }
 }

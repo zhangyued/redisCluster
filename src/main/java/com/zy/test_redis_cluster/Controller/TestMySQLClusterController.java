@@ -3,6 +3,8 @@ package com.zy.test_redis_cluster.Controller;
 import com.alibaba.fastjson.JSON;
 import com.zy.test_redis_cluster.Domain.Dto.TestMySQLClusterController.addEmployee.AddEmployeeRequestDto;
 import com.zy.test_redis_cluster.Domain.Dto.TestMySQLClusterController.addEmployee.AddEmployeeResponseDto;
+import com.zy.test_redis_cluster.Domain.Dto.TestMySQLClusterController.findAndUpdate.FindAndUpdateRequestDto;
+import com.zy.test_redis_cluster.Domain.Dto.TestMySQLClusterController.findAndUpdate.FindAndUpdateResponseDto;
 import com.zy.test_redis_cluster.Domain.Dto.TestMySQLClusterController.findEmployeeById.FindEmployeeByIdRequestDto;
 import com.zy.test_redis_cluster.Domain.Dto.TestMySQLClusterController.findEmployeeById.FindEmployeeByIdResponseDto;
 import com.zy.test_redis_cluster.Domain.Dto.TestMySQLClusterController.searchEmployee.SearchEmployeeRequestDto;
@@ -53,5 +55,14 @@ public class TestMySQLClusterController {
         FindEmployeeByIdResponseDto findEmployeeByIdResponseDto = mySQLClusterService.findEmployeeById(findEmployeeByIdRequestDto);
         log.debug("响应dto：" + JSON.toJSONString(findEmployeeByIdResponseDto));
         return findEmployeeByIdResponseDto;
+    }
+
+    @ApiModelProperty(value = "查和更新")
+    @GetMapping("/findAndUpdate")
+    public FindAndUpdateResponseDto findAndUpdate(FindAndUpdateRequestDto findAndUpdateRequestDto){
+        log.debug("请求dto：" + findAndUpdateRequestDto);
+        FindAndUpdateResponseDto findAndUpdateResponseDto = mySQLClusterService.findAndUpdate(findAndUpdateRequestDto);
+        log.debug("响应dto：" + JSON.toJSONString(findAndUpdateResponseDto));
+        return findAndUpdateResponseDto;
     }
 }

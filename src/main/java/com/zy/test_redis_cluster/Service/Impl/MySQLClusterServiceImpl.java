@@ -3,6 +3,8 @@ package com.zy.test_redis_cluster.Service.Impl;
 import com.zy.test_redis_cluster.Contstant.TestMySQLClusterController_Constant;
 import com.zy.test_redis_cluster.Domain.Dto.TestMySQLClusterController.addEmployee.AddEmployeeRequestDto;
 import com.zy.test_redis_cluster.Domain.Dto.TestMySQLClusterController.addEmployee.AddEmployeeResponseDto;
+import com.zy.test_redis_cluster.Domain.Dto.TestMySQLClusterController.findAndUpdate.FindAndUpdateRequestDto;
+import com.zy.test_redis_cluster.Domain.Dto.TestMySQLClusterController.findAndUpdate.FindAndUpdateResponseDto;
 import com.zy.test_redis_cluster.Domain.Dto.TestMySQLClusterController.findEmployeeById.FindEmployeeByIdRequestDto;
 import com.zy.test_redis_cluster.Domain.Dto.TestMySQLClusterController.findEmployeeById.FindEmployeeByIdResponseDto;
 import com.zy.test_redis_cluster.Domain.Dto.TestMySQLClusterController.searchEmployee.SearchEmployeeRequestDto;
@@ -52,6 +54,18 @@ public class MySQLClusterServiceImpl implements MySQLClusterService {
             e.printStackTrace();
             return findEmployeeByIdResponseDto;
         }
+    }
+
+    @Override
+
+    public FindAndUpdateResponseDto findAndUpdate(FindAndUpdateRequestDto findAndUpdateRequestDto) {
+        FindAndUpdateResponseDto findAndUpdateResponseDto =  employeeExtRepository.findEmployeeById(findAndUpdateRequestDto);
+        Employee employeeForUpdate = new Employee();
+        BeanUtils.copyProperties(findAndUpdateResponseDto,employeeForUpdate);
+        employeeForUpdate.setEmployeeName("小花");
+        Employee employee = employeeRepository.saveAndFlush(employeeForUpdate);
+        FindAndUpdateResponseDto findAndUpdateResponseDto2 =  employeeExtRepository.findEmployeeById(findAndUpdateRequestDto);
+        return findAndUpdateResponseDto2;
     }
 
     /**
