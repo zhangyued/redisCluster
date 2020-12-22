@@ -42,7 +42,7 @@ public class MinioUtil {
     public MinioClient getInstance() {
         try{
             if (minioClient == null) {
-                minioClient = new MinioClient(minioProperty.getEndpoint(),minioProperty.getPort(),minioProperty.getAccessKey(),minioProperty.getSecretKey());
+                minioClient = new MinioClient(minioProperty.getEndpoint(),minioProperty.getAccessKey(),minioProperty.getSecretKey());
             }
         }catch (Exception e){
             throw new MinioClientInitException(e.getMessage());
