@@ -61,6 +61,12 @@ spring:
         - 139.224.228.145:9005
         - 139.224.228.145:9006
 
+  minio:
+    endpoint: 139.224.228.145
+    port: 9000
+    accessKey: zhangyue
+    secretKey: 951753zhangYUE
+
 mybatis:
   mapper-locations:
     - classpath*:/mapper/*Mapper.xml

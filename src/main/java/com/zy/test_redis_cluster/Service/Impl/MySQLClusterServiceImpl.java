@@ -57,7 +57,6 @@ public class MySQLClusterServiceImpl implements MySQLClusterService {
     }
 
     @Override
-
     public FindAndUpdateResponseDto findAndUpdate(FindAndUpdateRequestDto findAndUpdateRequestDto) {
         FindAndUpdateResponseDto findAndUpdateResponseDto =  employeeExtRepository.findEmployeeById(findAndUpdateRequestDto);
         Employee employeeForUpdate = new Employee();
