@@ -1,6 +1,8 @@
 package com.zy.test_redis_cluster.Util;
 
 import com.alibaba.druid.util.StringUtils;
+import com.zy.test_redis_cluster.Exception.TestMinioController.BucketMakeException;
+import com.zy.test_redis_cluster.Exception.TestMinioController.MinioClientInitException;
 import com.zy.test_redis_cluster.Properties.MinioProperty;
 import io.minio.MinioClient;
 import io.minio.ObjectStat;
@@ -37,15 +39,15 @@ public class MinioUtil {
      * @return
      * @throws Exception
      */
-    public MinioClient getInstance() throws Exception {
+    public MinioClient getInstance() {
         try{
             if (minioClient == null) {
                 minioClient = new MinioClient(minioProperty.getEndpoint(),minioProperty.getPort(),minioProperty.getAccessKey(),minioProperty.getSecretKey());
             }
-            return minioClient;
         }catch (Exception e){
-            throw new Exception("初始化minioClient失败:" + e.getMessage());
+            throw new MinioClientInitException(e.getMessage());
         }
+        return minioClient;
     }
 
     /**
@@ -66,10 +68,14 @@ public class MinioUtil {
      * @return
      * @throws Exception
      */
-    public boolean makeBucket(String bucketName) throws Exception{
-        if (!bucketExists(bucketName)) {
-            minioClient.makeBucket(bucketName);
-            return true;
+    public boolean makeBucket(String bucketName) {
+        try{
+            if (!bucketExists(bucketName)) {
+                minioClient.makeBucket(bucketName);
+                return true;
+            }
+        }catch (Exception e){
+            throw new BucketMakeException(e.getMessage());
         }
         return false;
     }

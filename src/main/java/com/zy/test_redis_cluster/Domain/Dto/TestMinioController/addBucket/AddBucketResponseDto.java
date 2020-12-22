@@ -1,8 +1,8 @@
-package com.zy.test_redis_cluster.Domain.Dto.TestMySQLClusterController.addEmployee;
+package com.zy.test_redis_cluster.Domain.Dto.TestMinioController.addBucket;
 
 import io.swagger.annotations.ApiModelProperty;
 
-public class AddEmployeeResponseDto {
+public class AddBucketResponseDto {
 
     @ApiModelProperty(value = "返回标识")
     private String returnCode;
