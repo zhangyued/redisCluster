@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController("TestMinipController.v1")
 @RequestMapping("/minio")
-public class TestMinipController {
+public class TestMinioController {
 
-    private static final Logger log = LoggerFactory.getLogger(TestMinipController.class);
+    private static final Logger log = LoggerFactory.getLogger(TestMinioController.class);
 
     @Autowired
     private MinioService minioService;

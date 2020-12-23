@@ -3,6 +3,8 @@ package com.zy.test_redis_cluster.Util;
 import com.alibaba.druid.util.StringUtils;
 import com.zy.test_redis_cluster.Exception.TestMinioController.BucketMakeException;
 import com.zy.test_redis_cluster.Exception.TestMinioController.MinioClientInitException;
+import com.zy.test_redis_cluster.Exception.TestMinioController.PutObjectException;
+import com.zy.test_redis_cluster.Exception.TestMinioController.RemoveBucketException;
 import com.zy.test_redis_cluster.Properties.MinioProperty;
 import io.minio.MinioClient;
 import io.minio.ObjectStat;
@@ -51,18 +53,6 @@ public class MinioUtil {
     }
 
     /**
-     * 检查存储桶是否存在
-     * @param bucketName 存储桶名称
-     * @return
-     */
-    public boolean bucketExists(String bucketName) throws Exception {
-        if (minioClient.bucketExists(bucketName)) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
      * 创建存储桶
      * @param bucketName
      * @return
@@ -76,6 +66,18 @@ public class MinioUtil {
             }
         }catch (Exception e){
             throw new BucketMakeException(e.getMessage());
+        }
+        return false;
+    }
+
+    /**
+     * 检查存储桶是否存在
+     * @param bucketName 存储桶名称
+     * @return
+     */
+    public boolean bucketExists(String bucketName) throws Exception {
+        if (minioClient.bucketExists(bucketName)) {
+            return true;
         }
         return false;
     }
@@ -118,33 +120,6 @@ public class MinioUtil {
     }
 
     /**
-     * 删除存储桶
-     * @param bucketName
-     * @return
-     * @throws Exception
-     */
-    public boolean removeBucket(String bucketName) throws Exception{
-        boolean flag = bucketExists(bucketName);
-        if (flag) {
-            Iterable<Result<Item>> myObjects = listObjects(bucketName);
-            for (Result<Item> result : myObjects) {
-                Item item = result.get();
-                // 有对象文件，则删除失败
-                if (item.size() > 0) {
-                    return false;
-                }
-            }
-            // 删除存储桶，注意，只有存储桶为空时才能删除成功。
-            minioClient.removeBucket(bucketName);
-            flag = bucketExists(bucketName);
-            if (!flag) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
      * 列出存储桶中的所有对象名称
      * @param bucketName
      * @return
@@ -160,6 +135,32 @@ public class MinioUtil {
             }
         }
         return listObjectNames;
+    }
+
+    /**
+     * 删除存储桶
+     * @param bucketName
+     * @return
+     * @throws Exception
+     */
+    public boolean removeBucket(String bucketName) throws Exception{
+        try{
+            if (bucketExists(bucketName)) {
+                Iterable<Result<Item>> myObjects = listObjects(bucketName);
+                for (Result<Item> result : myObjects) {
+                    // 有对象文件，则删除失败
+                    if (result.get().size() > 0) {
+                        return false;
+                    }
+                }
+                // 删除存储桶，注意，只有存储桶为空时才能删除成功。
+                minioClient.removeBucket(bucketName);
+                return true;
+            }
+        }catch (Exception e){
+            throw new RemoveBucketException(e.getMessage());
+        }
+        return false;
     }
 
     /**
@@ -179,20 +180,23 @@ public class MinioUtil {
 
     /**
      * 通过文件上传到对象
-     * @param bucketName
-     * @param objectName
-     * @param fileName
+     * @param bucketName 存储桶名称
+     * @param objectName 存储桶里的对象名称。
+     * @param fileName File name
      * @return
      * @throws Exception
      */
     public boolean putObject(String bucketName, String objectName, String fileName) throws Exception{
-        boolean flag = bucketExists(bucketName);
-        if (flag) {
-            minioClient.putObject(bucketName, objectName, fileName, null);
-            ObjectStat statObject = statObject(bucketName, objectName);
-            if (statObject != null && statObject.length() > 0) {
-                return true;
+        try{
+            if (bucketExists(bucketName)) {
+                minioClient.putObject(bucketName, objectName, fileName, null);
+                ObjectStat statObject = statObject(bucketName, objectName);
+                if (statObject != null && statObject.length() > 0) {
+                    return true;
+                }
             }
+        }catch (Exception e){
+            throw new PutObjectException(e.getMessage());
         }
         return false;
     }
