@@ -11,9 +11,6 @@ public class MinioProperty {
     @Value("${spring.minio.endpoint}")
     private String endpoint;
 
-    @Value("${spring.minio.port}")
-    private Integer port;
-
     @Value("${spring.minio.accessKey}")
     private String accessKey;
 
@@ -22,10 +19,6 @@ public class MinioProperty {
 
     public String getEndpoint() {
         return endpoint;
-    }
-
-    public Integer getPort() {
-        return port;
     }
 
     public String getAccessKey() {
