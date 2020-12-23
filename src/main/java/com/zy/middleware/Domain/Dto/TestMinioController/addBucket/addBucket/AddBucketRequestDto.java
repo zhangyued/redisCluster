@@ -1,4 +1,4 @@
-package com.zy.middleware.Domain.Dto.TestMinioController.addBucket;
+package com.zy.middleware.Domain.Dto.TestMinioController.addBucket.addBucket;
 
 
 import io.swagger.annotations.ApiModelProperty;

@@ -1,8 +1,10 @@
 package com.zy.middleware.Controller;
 
 import com.alibaba.fastjson.JSON;
-import com.zy.middleware.Domain.Dto.TestMinioController.addBucket.AddBucketRequestDto;
-import com.zy.middleware.Domain.Dto.TestMinioController.addBucket.AddBucketResponseDto;
+import com.zy.middleware.Domain.Dto.TestMinioController.addBucket.addBucket.AddBucketRequestDto;
+import com.zy.middleware.Domain.Dto.TestMinioController.addBucket.addBucket.AddBucketResponseDto;
+import com.zy.middleware.Domain.Dto.TestMinioController.addBucket.removeBucket.RemoveBucketRequestDto;
+import com.zy.middleware.Domain.Dto.TestMinioController.addBucket.removeBucket.RemoveBucketResponseDto;
 import com.zy.middleware.Service.MinioService;
 import io.swagger.annotations.ApiModelProperty;
 import org.slf4j.Logger;
@@ -29,6 +31,15 @@ public class TestMinioController {
         AddBucketResponseDto addBucketResponseDto = minioService.addBucket(addBucketRequestDto);
         log.debug("响应dto：" + JSON.toJSONString(addBucketResponseDto));
         return addBucketResponseDto;
+    }
+
+    @ApiModelProperty(value = "删除桶名")
+    @PostMapping("/removeBucket")
+    public RemoveBucketResponseDto removeBucket(@RequestBody RemoveBucketRequestDto removeBucketRequestDto){
+        log.debug("请求dto：" + removeBucketRequestDto);
+        RemoveBucketResponseDto removeBucketResponseDto = minioService.removeBucket(removeBucketRequestDto);
+        log.debug("响应dto：" + JSON.toJSONString(removeBucketResponseDto));
+        return removeBucketResponseDto;
     }
 
 }
