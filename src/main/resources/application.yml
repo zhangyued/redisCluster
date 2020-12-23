@@ -8,7 +8,7 @@ management:
 
 spring:
   application:
-    name: testRedisCluster
+    name: testMiddleWare
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     username: root
