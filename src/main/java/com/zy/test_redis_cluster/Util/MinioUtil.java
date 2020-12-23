@@ -143,7 +143,7 @@ public class MinioUtil {
      * @return
      * @throws Exception
      */
-    public boolean removeBucket(String bucketName) throws Exception{
+    public boolean removeBucket(String bucketName) {
         try{
             if (bucketExists(bucketName)) {
                 Iterable<Result<Item>> myObjects = listObjects(bucketName);
@@ -186,7 +186,7 @@ public class MinioUtil {
      * @return
      * @throws Exception
      */
-    public boolean putObject(String bucketName, String objectName, String fileName) throws Exception{
+    public boolean putObject(String bucketName, String objectName, String fileName) {
         try{
             if (bucketExists(bucketName)) {
                 minioClient.putObject(bucketName, objectName, fileName, null);
