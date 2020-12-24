@@ -5,6 +5,10 @@ import com.zy.middleware.Domain.Dto.TestMinioController.addBucket.addBucket.AddB
 import com.zy.middleware.Domain.Dto.TestMinioController.addBucket.addBucket.AddBucketResponseDto;
 import com.zy.middleware.Domain.Dto.TestMinioController.addBucket.removeBucket.RemoveBucketRequestDto;
 import com.zy.middleware.Domain.Dto.TestMinioController.addBucket.removeBucket.RemoveBucketResponseDto;
+import com.zy.middleware.Domain.Dto.TestMinioController.addBucket.uploadObject.UploadObjectRequestDto;
+import com.zy.middleware.Domain.Dto.TestMinioController.addBucket.uploadObject.UploadObjectResponseDto;
+import com.zy.middleware.Domain.Dto.TestMinioController.addBucket.uploadObjectByStream.UploadObjectByStreamRequestDto;
+import com.zy.middleware.Domain.Dto.TestMinioController.addBucket.uploadObjectByStream.UploadObjectByStreamResponseDto;
 import com.zy.middleware.Service.MinioService;
 import io.swagger.annotations.ApiModelProperty;
 import org.slf4j.Logger;
@@ -36,6 +40,33 @@ public class TestMinioController {
     @ApiModelProperty(value = "删除桶名")
     @PostMapping("/removeBucket")
     public RemoveBucketResponseDto removeBucket(@RequestBody RemoveBucketRequestDto removeBucketRequestDto){
+        log.debug("请求dto：" + removeBucketRequestDto);
+        RemoveBucketResponseDto removeBucketResponseDto = minioService.removeBucket(removeBucketRequestDto);
+        log.debug("响应dto：" + JSON.toJSONString(removeBucketResponseDto));
+        return removeBucketResponseDto;
+    }
+
+    @ApiModelProperty(value = "上传资源-文件资源名称")
+    @PostMapping("/uploadObjectByFileName")
+    public UploadObjectResponseDto uploadObjectByFileName(@RequestBody UploadObjectRequestDto uploadObjectRequestDto){
+        log.debug("请求dto：" + uploadObjectRequestDto);
+        UploadObjectResponseDto uploadObjectResponseDto = minioService.uploadObjectByFileName(uploadObjectRequestDto);
+        log.debug("响应dto：" + JSON.toJSONString(uploadObjectResponseDto));
+        return uploadObjectResponseDto;
+    }
+
+    @ApiModelProperty(value = "上传资源-流")
+    @PostMapping("/uploadObjectByStream")
+    public UploadObjectByStreamResponseDto uploadObjectByStream(@RequestBody UploadObjectByStreamRequestDto uploadObjectRequestDto){
+        log.debug("请求dto：" + uploadObjectRequestDto);
+        UploadObjectByStreamResponseDto uploadObjectByStreamResponseDto = minioService.uploadObjectByStream(uploadObjectRequestDto);
+        log.debug("响应dto：" + JSON.toJSONString(uploadObjectByStreamResponseDto));
+        return uploadObjectByStreamResponseDto;
+    }
+
+    @ApiModelProperty(value = "删除资源")
+    @PostMapping("/removeObjectByName")
+    public RemoveBucketResponseDto removeObjectByName(@RequestBody RemoveBucketRequestDto removeBucketRequestDto){
         log.debug("请求dto：" + removeBucketRequestDto);
         RemoveBucketResponseDto removeBucketResponseDto = minioService.removeBucket(removeBucketRequestDto);
         log.debug("响应dto：" + JSON.toJSONString(removeBucketResponseDto));

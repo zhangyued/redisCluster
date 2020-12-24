@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -170,8 +171,7 @@ public class MinioUtil {
      * @return
      */
     public ObjectStat statObject(String bucketName, String objectName) throws Exception{
-        boolean flag = bucketExists(bucketName);
-        if (flag) {
+        if (bucketExists(bucketName)) {
             ObjectStat statObject = minioClient.statObject(bucketName, objectName);
             return statObject;
         }
@@ -188,12 +188,14 @@ public class MinioUtil {
      */
     public boolean putObject(String bucketName, String objectName, String fileName) {
         try{
-            if (bucketExists(bucketName)) {
-                minioClient.putObject(bucketName, objectName, fileName, null);
-                ObjectStat statObject = statObject(bucketName, objectName);
-                if (statObject != null && statObject.length() > 0) {
-                    return true;
-                }
+            //若桶不存在，则创建新的桶
+            if (!bucketExists(bucketName)) {
+                makeBucket(bucketName);
+            }
+            minioClient.putObject(bucketName, objectName, fileName, null);
+            ObjectStat statObject = statObject(bucketName, objectName);
+            if (statObject != null && statObject.length() > 0) {
+                return true;
             }
         }catch (Exception e){
             throw new PutObjectException(e.getMessage());
@@ -220,14 +222,20 @@ public class MinioUtil {
      * @param stream
      * @return
      */
-    public boolean putObject(String bucketName, String objectName, InputStream stream) throws Exception{
-        boolean flag = bucketExists(bucketName);
-        if (flag) {
+    public boolean putObject(String bucketName, String objectName, InputStream stream) throws IOException {
+        try{
+            if (!bucketExists(bucketName)) {
+                makeBucket(bucketName);
+            }
             minioClient.putObject(bucketName, objectName, stream, new PutObjectOptions(stream.available(), -1));
             ObjectStat statObject = statObject(bucketName, objectName);
             if (statObject != null && statObject.length() > 0) {
                 return true;
             }
+        }catch (Exception e){
+            throw new PutObjectException(e.getMessage());
+        }finally {
+            stream.close();
         }
         return false;
     }

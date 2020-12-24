@@ -6,8 +6,13 @@ import com.zy.middleware.Domain.Dto.TestMinioController.addBucket.addBucket.AddB
 import com.zy.middleware.Domain.Dto.TestMinioController.addBucket.addBucket.AddBucketResponseDto;
 import com.zy.middleware.Domain.Dto.TestMinioController.addBucket.removeBucket.RemoveBucketRequestDto;
 import com.zy.middleware.Domain.Dto.TestMinioController.addBucket.removeBucket.RemoveBucketResponseDto;
+import com.zy.middleware.Domain.Dto.TestMinioController.addBucket.uploadObject.UploadObjectRequestDto;
+import com.zy.middleware.Domain.Dto.TestMinioController.addBucket.uploadObject.UploadObjectResponseDto;
+import com.zy.middleware.Domain.Dto.TestMinioController.addBucket.uploadObjectByStream.UploadObjectByStreamRequestDto;
+import com.zy.middleware.Domain.Dto.TestMinioController.addBucket.uploadObjectByStream.UploadObjectByStreamResponseDto;
 import com.zy.middleware.Exception.TestMinioController.BucketMakeException;
 import com.zy.middleware.Exception.TestMinioController.MinioClientInitException;
+import com.zy.middleware.Exception.TestMinioController.PutObjectException;
 import com.zy.middleware.Exception.TestMinioController.RemoveBucketException;
 import com.zy.middleware.Service.MinioService;
 import com.zy.middleware.Util.MinioUtil;
@@ -15,6 +20,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.io.File;
+import java.io.FileInputStream;
 
 @Service
 public class MinioServiceImpl implements MinioService {
@@ -78,6 +86,69 @@ public class MinioServiceImpl implements MinioService {
         }
     }
 
+
+    /**
+     * 通过文件名称上传资源
+     * @param uploadObjectRequestDto
+     * @return
+     */
+    @Override
+    public UploadObjectResponseDto uploadObjectByFileName(UploadObjectRequestDto uploadObjectRequestDto) {
+        UploadObjectResponseDto uploadObjectResponseDto = new UploadObjectResponseDto();
+        try{
+            if(null != uploadObjectRequestDto && !StringUtils.isEmpty(uploadObjectRequestDto.getBucketName())
+                    && !StringUtils.isEmpty(uploadObjectRequestDto.getObjectName()) && !StringUtils.isEmpty(uploadObjectRequestDto.getFilePath())){
+                minioUtil.getInstance();
+                if (minioUtil.putObject(uploadObjectRequestDto.getBucketName(),uploadObjectRequestDto.getObjectName(),uploadObjectRequestDto.getFilePath())){
+                    return uploadObjectByFileName_initReturn(uploadObjectResponseDto,CommonContstant.commonReturn_Code.SUCCESS_CODE,CommonContstant.commonReturn_Msg.SUCCESS_MSG);
+                }else{
+                    return uploadObjectByFileName_initReturn(uploadObjectResponseDto,CommonContstant.commonReturn_Code.Fail_CODE,CommonContstant.commonReturn_Msg.Fail_MSG);
+                }
+            }else{
+                return uploadObjectByFileName_initReturn(uploadObjectResponseDto,CommonContstant.commonReturn_Code.Fail_CODE,CommonContstant.commonReturn_Msg.Fail_MSG + "参数为空");
+            }
+        }catch (PutObjectException e){
+            log.debug("上传异常");
+            e.printStackTrace();
+            return uploadObjectByFileName_initReturn(uploadObjectResponseDto,CommonContstant.commonReturn_Code.Fail_CODE,CommonContstant.commonReturn_Msg.Fail_MSG + e.getMessage());
+        }catch (Exception e){
+            log.debug("程序异常");
+            e.printStackTrace();
+            return uploadObjectByFileName_initReturn(uploadObjectResponseDto,CommonContstant.commonReturn_Code.Fail_CODE,CommonContstant.commonReturn_Msg.Fail_MSG + e.getMessage());
+        }
+    }
+
+    /**
+     * 资源上传-数据流
+     * @param uploadObjectRequestDto
+     * @return
+     */
+    @Override
+    public UploadObjectByStreamResponseDto uploadObjectByStream(UploadObjectByStreamRequestDto uploadObjectRequestDto) {
+        UploadObjectByStreamResponseDto uploadObjectByStreamResponseDto = new UploadObjectByStreamResponseDto();
+        try{
+            if (null != uploadObjectRequestDto && !StringUtils.isEmpty(uploadObjectRequestDto.getBucketName())
+                    && !StringUtils.isEmpty(uploadObjectRequestDto.getObjectName())){
+                minioUtil.getInstance();
+                if (minioUtil.putObject(uploadObjectRequestDto.getBucketName(),uploadObjectRequestDto.getObjectName(),new FileInputStream(new File("test3.txt")))){
+                    return uploadObjectByStream_initReturn(uploadObjectByStreamResponseDto,CommonContstant.commonReturn_Code.SUCCESS_CODE,CommonContstant.commonReturn_Msg.SUCCESS_MSG);
+                }else{
+                    return uploadObjectByStream_initReturn(uploadObjectByStreamResponseDto,CommonContstant.commonReturn_Code.Fail_CODE,CommonContstant.commonReturn_Msg.Fail_MSG);
+                }
+            }else{
+                return uploadObjectByStream_initReturn(uploadObjectByStreamResponseDto,CommonContstant.commonReturn_Code.Fail_CODE,CommonContstant.commonReturn_Msg.Fail_MSG + "参数为空");
+            }
+        }catch (PutObjectException e){
+            log.debug("上传异常");
+            e.printStackTrace();
+            return uploadObjectByStream_initReturn(uploadObjectByStreamResponseDto,CommonContstant.commonReturn_Code.Fail_CODE,CommonContstant.commonReturn_Msg.Fail_MSG + e.getMessage());
+        }catch (Exception e){
+            log.debug("程序出现错误");
+            e.printStackTrace();
+            return uploadObjectByStream_initReturn(uploadObjectByStreamResponseDto,CommonContstant.commonReturn_Code.Fail_CODE,CommonContstant.commonReturn_Msg.Fail_MSG + e.getMessage());
+        }
+    }
+
     /**
      * addBucket返回报文
      * @param addBucketResponseDto
@@ -97,5 +168,31 @@ public class MinioServiceImpl implements MinioService {
         removeBucketResponseDto.setReturnCode(returnCode);
         removeBucketResponseDto.setReturnMsg(returnMsg);
         return removeBucketResponseDto;
+    }
+
+    /**
+     * uploadObjectByFileName返回报文
+     * @param uploadObjectResponseDto
+     * @param returnCode
+     * @param returnMsg
+     * @return
+     */
+    public UploadObjectResponseDto uploadObjectByFileName_initReturn (UploadObjectResponseDto uploadObjectResponseDto,String returnCode,String returnMsg){
+        uploadObjectResponseDto.setReturnCode(returnCode);
+        uploadObjectResponseDto.setReturnMsg(returnMsg);
+        return uploadObjectResponseDto;
+    }
+
+    /**
+     * uploadObjectByStream返回报文
+     * @param uploadObjectByStreamResponseDto
+     * @param returnCode
+     * @param returnMsg
+     * @return
+     */
+    public UploadObjectByStreamResponseDto uploadObjectByStream_initReturn (UploadObjectByStreamResponseDto uploadObjectByStreamResponseDto,String returnCode,String returnMsg){
+        uploadObjectByStreamResponseDto.setReturnCode(returnCode);
+        uploadObjectByStreamResponseDto.setReturnMsg(returnMsg);
+        return uploadObjectByStreamResponseDto;
     }
 }

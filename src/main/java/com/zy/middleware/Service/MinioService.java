@@ -4,6 +4,10 @@ import com.zy.middleware.Domain.Dto.TestMinioController.addBucket.addBucket.AddB
 import com.zy.middleware.Domain.Dto.TestMinioController.addBucket.addBucket.AddBucketResponseDto;
 import com.zy.middleware.Domain.Dto.TestMinioController.addBucket.removeBucket.RemoveBucketRequestDto;
 import com.zy.middleware.Domain.Dto.TestMinioController.addBucket.removeBucket.RemoveBucketResponseDto;
+import com.zy.middleware.Domain.Dto.TestMinioController.addBucket.uploadObject.UploadObjectRequestDto;
+import com.zy.middleware.Domain.Dto.TestMinioController.addBucket.uploadObject.UploadObjectResponseDto;
+import com.zy.middleware.Domain.Dto.TestMinioController.addBucket.uploadObjectByStream.UploadObjectByStreamRequestDto;
+import com.zy.middleware.Domain.Dto.TestMinioController.addBucket.uploadObjectByStream.UploadObjectByStreamResponseDto;
 
 public interface MinioService {
     /**
@@ -19,4 +23,18 @@ public interface MinioService {
      * @return
      */
     RemoveBucketResponseDto removeBucket(RemoveBucketRequestDto removeBucketRequestDto);
+
+    /**
+     * 上传资源-文件名称
+     * @param uploadObjectRequestDto
+     * @return
+     */
+    UploadObjectResponseDto uploadObjectByFileName(UploadObjectRequestDto uploadObjectRequestDto);
+
+    /**
+     * 上传资源-数据流
+     * @param uploadObjectRequestDto
+     * @return
+     */
+    UploadObjectByStreamResponseDto uploadObjectByStream(UploadObjectByStreamRequestDto uploadObjectRequestDto);
 }
